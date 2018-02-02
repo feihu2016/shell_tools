@@ -10,8 +10,9 @@ def con_line_replace(filename, old_str, new_str):
         return '%s  ,not find!' % filename
     
     #分解文件目录和文件名称
-    path_split = os.path.split(filename)
-    if not path_split[0]:
+    path_split = list(os.path.split(filename))
+    
+    if not path_split[0] or '.' == path_split[0]:
         path_split[0] = os.getcwd()
 
     filename_tmp = filename + '.tmp'
@@ -37,24 +38,34 @@ def con_line_replace(filename, old_str, new_str):
     return '合计处理：%s 行' % m
 
 
+def help_str():
+    help_str = '''
+    1) 按行处理文件字符替换的函数
+    files.py con_line_replace /data/.../file.txt target_str replace_str 
+    2)
+
+    '''
+    print(help_str)
+
 if __name__ == '__main__':
     argv_list = sys.argv
     #至少两个参数
     if len(argv_list)<2:
         print '缺少参数！'
         exit()
-    
-    if argv_list[1] == 'con_line_replace':
+
+
+    if argv_list[1] == 'help':
+        help_str() 
+    elif argv_list[1] == 'con_line_replace':
         if len(argv_list) == 5:
              print con_line_replace(argv_list[2], argv_list[3], argv_list[4])
         else:
              print 'con_line_replace 命令，参数不足！'
     else:
-        print '未知指令: %s' % argv_list[1]    
+        print '未知指令: %s' % argv_list[1]   
+        print 'files.py help  查看命令列表' 
 
     #print argv_list
 
 
-
-
- 
