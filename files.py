@@ -64,14 +64,44 @@ def mmap_replace(filename, old_str, new_str):
     open_file.close()
     return '合计替换：%s 次' % replace_num
 
+#查找特征文本函数
+def mmap_find(filename, find_str, mod = 0):
+    #文件不存在，直接返回
+    if not os.path.exists(filename):
+        return '%s  ,not find!' % filename
+    
+    #使用mmap查找并替换字符
+    open_file = open(filename,'r+')
+    mmap_file = mmap.mmap(open_file.fileno(),0,access=mmap.ACCESS_WRITE)  
+    find_list = [0]
+    find_index = mmap_file.find(find_str)
+    while find_index > 0:
+        if mod == 1:
+            find_list[0] += 1
+        else:
+            find_list.append(find_index)
+        mmap_file.seek(find_index+len(find_str))
+        find_index = mmap_file.find(find_str)
+
+    #关闭文件，并返回处理结果
+    mmap_file.close()
+    open_file.close()
+    if mod == 1:
+        return '合计找到匹配：%s 次' % find_list[0]
+    else:
+        return_str = '|'.join(map(lambda x:str(x),find_list))
+        stat_str = '\n合计找到匹配：%s 次' % str(len(find_list)-1)
+        return return_str + stat_str 
 
 def help_str():
     help_str = '''
     1) 按行处理文件字符替换的函数
-    files.py con_line_replace /data/.../file.txt target_str replace_str 
+      files.py con_line_replace /data/.../file.txt target_str replace_str 
     2)等字节文本替换函数(注意：target_str的字节数需要等于replace_str)
-    files.py mmap_replace /data/.../file.txt target_str replace_str 
-
+      files.py mmap_replace /data/.../file.txt target_str replace_str 
+    3)特征字符查找,mod参数可以不写，默认为0，表示返回位置列表和匹配次数；为1表示只返会匹配次数
+      file.py mmap_find /data/.../file.txt find_str mod
+     
     '''
     print(help_str)
 
@@ -94,6 +124,11 @@ if __name__ == '__main__':
              print mmap_replace(argv_list[2], argv_list[3], argv_list[4])
         else:
              print 'con_line_replace 命令，参数不足！'
+    elif argv_list[1] == 'mmap_find':
+        if len(argv_list) == 5:
+             print mmap_find(argv_list[2], argv_list[3], int(argv_list[4]))
+        else:
+             print mmap_find(argv_list[2], argv_list[3])
     else:
         print '未知指令: %s' % argv_list[1]   
         print 'files.py help  查看命令列表' 
