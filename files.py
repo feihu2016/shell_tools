@@ -99,7 +99,7 @@ def help_str():
       files.py con_line_replace /data/.../file.txt target_str replace_str 
     2)等字节文本替换函数(注意：target_str的字节数需要等于replace_str)
       files.py mmap_replace /data/.../file.txt target_str replace_str 
-    3)特征字符查找,mod参数可以不写，默认为0，表示返回位置列表和匹配次数；为1表示只返会匹配次数
+    3)特征字符查找,mod参数可以不写，默认为0，表示返回位置列表和匹配次数；为1表示只返回匹配次数
       file.py mmap_find /data/.../file.txt find_str mod
      
     '''
