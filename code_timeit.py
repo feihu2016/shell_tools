@@ -275,6 +275,7 @@ def main(args=None, *, _wrap_timer=None):
             sec = msec / 1000
             print("best of %d: %.*g sec per loop" % (repeat, precision, sec))
     return None
+#2001
 if __name__ == "__main__":
     sys.exit(main())
 
