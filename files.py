@@ -1,5 +1,4 @@
 #encoding=utf-8
-
 ''' 使用说明
     1) 按行处理文件字符替换的函数
       files.py con_line_replace /data/.../file.txt target_str replace_str 
@@ -12,8 +11,11 @@
 import os,sys
 import mmap
 
-#按行处理文件字符替换的函数
 def con_line_replace(filename, old_str, new_str):
+    ''' 按行处理文件字符替换的函数
+    通过创建新文件实现逐行修改
+    '''
+
     #文件不存在，直接返回
     if not os.path.exists(filename):
         return '%s  ,not find!' % filename
@@ -46,8 +48,11 @@ def con_line_replace(filename, old_str, new_str):
     os.remove(filename_tmp)
     return '合计处理：%s 行' % m
 
-#等字节文本替换函数
+
 def mmap_replace(filename, old_str, new_str):
+    '''mmap方式等字节文本替换函数
+    '''
+
     #文件不存在，直接返回
     if not os.path.exists(filename):
         return '%s  ,not find!' % filename
@@ -73,8 +78,10 @@ def mmap_replace(filename, old_str, new_str):
     open_file.close()
     return '合计替换：%s 次' % replace_num
 
-#查找特征文本函数
 def mmap_find(filename, find_str, mod = 0):
+    '''mmap方式查找特征文本函数
+    '''
+    
     #文件不存在，直接返回
     if not os.path.exists(filename):
         return '%s  ,not find!' % filename
@@ -102,18 +109,6 @@ def mmap_find(filename, find_str, mod = 0):
         stat_str = '\n合计找到匹配：%s 次' % str(len(find_list)-1)
         return return_str + stat_str 
 
-def help_str():
-    help_str = '''
-    1) 按行处理文件字符替换的函数
-      files.py con_line_replace /data/.../file.txt target_str replace_str 
-    2)等字节文本替换函数(注意：target_str的字节数需要等于replace_str)
-      files.py mmap_replace /data/.../file.txt target_str replace_str 
-    3)特征字符查找,mod参数可以不写，默认为0，表示返回位置列表和匹配次数；为1表示只返回匹配次数
-      file.py mmap_find /data/.../file.txt find_str mod
-     
-    '''
-    print(help_str)
-
 if __name__ == '__main__':
     argv_list = sys.argv
     #至少两个参数
@@ -121,9 +116,7 @@ if __name__ == '__main__':
         print '缺少参数！'
         exit()
 
-    if argv_list[1] == 'help':
-        help_str() 
-    elif argv_list[1] == 'con_line_replace':
+    if argv_list[1] == 'con_line_replace':
         if len(argv_list) == 5:
              print con_line_replace(argv_list[2], argv_list[3], argv_list[4])
         else:
@@ -140,7 +133,7 @@ if __name__ == '__main__':
              print mmap_find(argv_list[2], argv_list[3])
     else:
         print '未知指令: %s' % argv_list[1]   
-        print 'files.py help  查看命令列表' 
+        print 'pydoc  查看帮助信息' 
 
     #print argv_list
 
